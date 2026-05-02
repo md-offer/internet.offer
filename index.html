@@ -1,28 +1,344 @@
 <!DOCTYPE html>
 <html lang="bn">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>ইন্টারনেট অফার - সাতকানিয়া</title>
-  <style>
-    body {font-family:sans-serif; text-align:center; padding:20px; background:#f0f2f5;}
-    .offer {background:white; padding:15px; margin:10px auto; max-width:400px; border-radius:10px; box-shadow:0 2px 5px #ccc;}
-    .btn {background:#25D366; color:white; padding:12px 25px; text-decoration:none; border-radius:8px; display:inline-block; font-weight:bold; margin-top:10px;}
-    h1{color:#1877F2;} h2{color:#e91e63; margin:5px 0;}
-  </style>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>সাতকানিয়া এমবি অফার - ৩০টি ধামাকা প্যাক</title>
+    <link href="https://fonts.googleapis.com/css2?family=Hind+Siliguri:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        body { font-family: 'Hind Siliguri', sans-serif; background: #f1f5f9; color: #334155; }
+        .container { max-width: 1400px; margin: 0 auto; padding: 0 15px; }
+        
+        .admin-bar {
+            background: #16a34a; color: white; padding: 10px; text-align: center;
+            display: none; position: sticky; top: 0; z-index: 1000; font-weight: 600;
+        }
+        .admin-bar.active { display: block; }
+        .admin-bar button {
+            background: white; color: #16a34a; border: none; padding: 6px 16px;
+            border-radius: 6px; margin: 0 5px; cursor: pointer; font-weight: 700;
+        }
+        
+        .top-bar { background: #dc2626; color: white; text-align: center; padding: 8px; font-size: 14px; }
+        header { background: white; padding: 20px 0; box-shadow: 0 2px 4px rgba(0,0,0,0.1); }
+        .header-content { display: flex; align-items: center; justify-content: space-between; max-width: 1400px; margin: 0 auto; padding: 0 15px; }
+        header h1 { color: #dc2626; font-size: 2rem; }
+        .admin-btn {
+            background: #334155; color: white; border: none; padding: 10px 18px;
+            border-radius: 8px; cursor: pointer; font-weight: 600;
+        }
+        
+        .offers { padding: 30px 0; }
+        .section-title { text-align: center; font-size: 1.5rem; margin-bottom: 25px; color: #1e293b; }
+        .offer-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 20px; }
+        .offer-card { 
+            background: white; border-radius: 12px; padding: 18px; border: 2px solid #e2e8f0; 
+            box-shadow: 0 4px 6px rgba(0,0,0,0.05); position: relative;
+        }
+        .delete-btn {
+            position: absolute; top: 10px; right: 10px; background: #dc2626; color: white;
+            border: none; width: 28px; height: 28px; border-radius: 50%; cursor: pointer;
+            display: none; z-index: 10;
+        }
+        .admin-mode .delete-btn { display: flex; align-items: center; justify-content: center; }
+        
+        .operator { display: inline-block; padding: 4px 12px; border-radius: 20px; font-size: 12px; font-weight: bold; color: white; margin-bottom: 10px; }
+        .gp { background: #00a0e3; }
+        .robi { background: #ed1c24; }
+        .banglalink { background: #f47920; }
+        .airtel { background: #e60000; }
+        .offer-title { font-size: 1.3rem; margin: 8px 0; }
+        .offer-price { font-size: 1.8rem; color: #dc2626; font-weight: bold; }
+        .offer-validity { color: #64748b; font-size: 14px; margin: 8px 0; }
+        .payment-info { background: #fef3c7; border: 1px dashed #f59e0b; border-radius: 8px; padding: 10px; margin: 15px 0; }
+        .payment-info h4 { color: #92400e; margin-bottom: 8px; font-size: 0.95rem; }
+        
+        .payment-btns { display: grid; grid-template-columns: 1fr 1fr; gap: 8px; margin: 8px 0; }
+        .bkash-link, .nagad-link { 
+            display: flex; align-items: center; justify-content: center; gap: 6px;
+            color: white; font-weight: bold; font-size: 1rem; text-align: center; 
+            padding: 12px 8px; border-radius: 8px; text-decoration: none;
+        }
+        .bkash-link { background: #e2136e; }
+        .bkash-link:active { background: #c4105d; }
+        .nagad-link { background: #f42f2f; }
+        .nagad-link:active { background: #d42626; }
+        
+        .payment-steps { font-size: 13px; color: #78350f; line-height: 1.5; }
+        .tap-hint { font-size: 11px; color: #a16207; text-align: center; margin-top: 4px; }
+        .btn-order { display: block; width: 100%; background: #25d366; color: white; text-align: center; padding: 12px; border-radius: 8px; text-decoration: none; font-weight: bold; margin-top: 10px; border: none; cursor: pointer; }
+        footer { background: #1e293b; color: white; text-align: center; padding: 25px 0; margin-top: 30px; }
+        .hot { background: #dc2626; color: white; font-size: 10px; padding: 2px 6px; border-radius: 4px; margin-left: 5px; }
+        
+        .modal {
+            display: none; position: fixed; top: 0; left: 0; width: 100%; height: 100%;
+            background: rgba(0,0,0,0.7); z-index: 2000; align-items: center; justify-content: center;
+        }
+        .modal.active { display: flex; }
+        .modal-content {
+            background: white; border-radius: 12px; padding: 25px; max-width: 450px; width: 90%;
+        }
+        .modal-content h2 { color: #1e293b; margin-bottom: 15px; }
+        .modal-content input, .modal-content select {
+            width: 100%; padding: 12px; margin: 8px 0; border-radius: 8px; border: 2px solid #e2e8f0;
+            font-family: 'Hind Siliguri', sans-serif; font-size: 15px;
+        }
+        .modal-content button {
+            width: 100%; padding: 12px; margin-top: 12px; border: none; border-radius: 8px;
+            font-weight: 700; cursor: pointer; font-size: 1rem;
+        }
+        .btn-save { background: #16a34a; color: white; }
+        .btn-cancel { background: #64748b; color: white; margin-top: 8px; }
+        
+        .toast {
+            position: fixed; bottom: 20px; left: 50%; transform: translateX(-50%); background: #16a34a;
+            color: white; padding: 12px 24px; border-radius: 8px; font-weight: 600;
+            opacity: 0; transition: 0.3s; z-index: 1000;
+        }
+        .toast.show { opacity: 1; }
+        
+        @media (max-width: 768px) {
+            .header-content { flex-direction: column; gap: 10px; }
+            header h1 { font-size: 1.5rem; }
+            .payment-btns { grid-template-columns: 1fr; }
+        }
+    </style>
 </head>
 <body>
-  <h1>সাতকানিয়া ইন্টারনেট অফার</h1>
-  <div class="offer">
-    <h3>রবি ৭৫ জিবি ৩০ দিন</h3>
-    <h2>৬৯৯ টাকা</h2>
-    <a class="btn" href="https://wa.me/8801823926284?text=ভাই রবি 75GB লাগবে">WhatsApp অর্ডার</a>
-  </div>
-  <div class="offer">
-    <h3>জিপি ৫০ জিবি ৩০ দিন</h3>
-    <h2>৬৪৯ টাকা</h2>
-    <a class="btn" href="https://wa.me/8801823926284?text=ভাই GP 50GB লাগবে">WhatsApp অর্ডার</a>
-  </div>
-  <p><b>যোগাযোগ: 01823926284</b></p>
+    <div class="admin-bar" id="adminBar">
+        <span><i class="fa-solid fa-user-shield"></i> এডমিন মোড চালু</span>
+        <button onclick="openAddModal()"><i class="fa-solid fa-plus"></i> নতুন অফার</button>
+        <button onclick="logoutAdmin()"><i class="fa-solid fa-right-from-bracket"></i> লগআউট</button>
+    </div>
+
+    <div class="top-bar"> 🔥 ৩০টি নতুন অফার | বিকাশ + নগদ | 01823926284 </div>
+    
+    <header>
+        <div class="header-content">
+            <div>
+                <h1>সাতকানিয়া এমবি অফার</h1>
+                <p>সব সিমের সেরা ৩০টি কম্বো প্যাক</p>
+            </div>
+            <button class="admin-btn" onclick="showLogin()">
+                <i class="fa-solid fa-user-lock"></i> এডমিন
+            </button>
+        </div>
+    </header>
+    
+    <section class="offers">
+        <div class="container">
+            <h2 class="section-title">⚡ আজকের ৩০টি স্পেশাল অফার</h2>
+            <div class="offer-grid" id="offerGrid"></div>
+        </div>
+    </section>
+    
+    <footer>
+        <div class="container">
+            <p><strong>হেল্পলাইন:</strong> <a href="tel:01823926284" style="color: #fff;">01823926284</a> | সাতকানিয়া, চট্টগ্রাম</p>
+            <p style="margin-top: 10px; font-size: 14px;">২৪ ঘন্টা সার্ভিস | রিচার্জ না পেলে ১০০% টাকা ফেরত</p>
+            <p style="margin-top: 15px;">© 2026 সাতকানিয়া এমবি অফার</p>
+        </div>
+    </footer>
+
+    <div class="modal" id="loginModal">
+        <div class="modal-content">
+            <h2><i class="fa-solid fa-lock"></i> এডমিন লগইন</h2>
+            <input type="password" id="adminPass" placeholder="পাসওয়ার্ড দিন">
+            <button class="btn-save" onclick="loginAdmin()">লগইন করুন</button>
+            <button class="btn-cancel" onclick="closeModal('loginModal')">বন্ধ করুন</button>
+        </div>
+    </div>
+
+    <div class="modal" id="addModal">
+        <div class="modal-content">
+            <h2><i class="fa-solid fa-plus"></i> নতুন অফার যোগ করুন</h2>
+            <select id="offerOperator">
+                <option value="gp">গ্রামীণফোন</option>
+                <option value="robi">রবি</option>
+                <option value="banglalink">বাংলালিংক</option>
+                <option value="airtel">এয়ারটেল</option>
+            </select>
+            <input type="text" id="offerTitle" placeholder="অফারের নাম (যেমন: ৪০ জিবি ইন্টারনেট)">
+            <input type="text" id="offerPrice" placeholder="দাম (যেমন: 599)">
+            <input type="text" id="offerValidity" placeholder="মেয়াদ (যেমন: ৩০ দিন)">
+            <label style="display: flex; align-items: center; gap: 10px; margin: 10px 0; color: #334155;">
+                <input type="checkbox" id="offerHot" style="width: auto;"> HOT ব্যাজ দিন
+            </label>
+            <button class="btn-save" onclick="addOffer()">সেভ করুন</button>
+            <button class="btn-cancel" onclick="closeModal('addModal')">বন্ধ করুন</button>
+        </div>
+    </div>
+
+    <div class="toast" id="toast"></div>
+
+    <script>
+        let defaultOffers = [
+            {id: 1, operator: 'gp', title: '৪০ জিবি ইন্টারনেট', price: '599', validity: '৩০ দিন', hot: true},
+            {id: 2, operator: 'gp', title: '২৫ জিবি + ৩০০ মিনিট', price: '499', validity: '৩০ দিন', hot: false},
+            {id: 3, operator: 'gp', title: 'আনলিমিটেড ইন্টারনেট', price: '299', validity: '৭ দিন', hot: false},
+            {id: 4, operator: 'gp', title: '১৫ জিবি + ২০০ মিনিট', price: '349', validity: '৩০ দিন', hot: false},
+            {id: 5, operator: 'gp', title: '৫০ জিবি ইন্টারনেট', price: '699', validity: '৩০ দিন', hot: true},
+            {id: 6, operator: 'gp', title: '১০০০ মিনিট', price: '399', validity: '৩০ দিন', hot: false},
+            {id: 7, operator: 'gp', title: '১০ জিবি + ৫০০ মিনিট', price: '429', validity: '৩০ দিন', hot: false},
+            {id: 8, operator: 'gp', title: '১ জিবি প্রতিদিন', price: '549', validity: '৩০ দিন', hot: true},
+            {id: 9, operator: 'robi', title: '৬০ জিবি ইন্টারনেট', price: '649', validity: '৩০ দিন', hot: true},
+            {id: 10, operator: 'robi', title: '১০০০ মিনিট + ১৫ জিবি', price: '449', validity: '৩০ দিন', hot: false},
+            {id: 11, operator: 'robi', title: '২০ জিবি + ২০০ মিনিট', price: '349', validity: '১৫ দিন', hot: false},
+            {id: 12, operator: 'robi', title: '৪৫ জিবি ইন্টারনেট', price: '579', validity: '৩০ দিন', hot: false},
+            {id: 13, operator: 'robi', title: '৩০ জিবি + ৪০০ মিনিট', price: '549', validity: '৩০ দিন', hot: true},
+            {id: 14, operator: 'robi', title: 'আনলিমিটেড মিনিট', price: '499', validity: '৩০ দিন', hot: false},
+            {id: 15, operator: 'robi', title: '৮০ জিবি ইন্টারনেট', price: '799', validity: '৩০ দিন', hot: true},
+            {id: 16, operator: 'robi', title: '৫ জিবি + ১০০ মিনিট', price: '199', validity: '৭ দিন', hot: false},
+            {id: 17, operator: 'banglalink', title: '৮০ জিবি ইন্টারনেট', price: '699', validity: '৩০ দিন', hot: false},
+            {id: 18, operator: 'banglalink', title: '৫০ জিবি + ৪০০ মিনিট', price: '599', validity: '৩০ দিন', hot: true},
+            {id: 19, operator: 'banglalink', title: '৩৫ জিবি ইন্টারনেট', price: '529', validity: '৩০ দিন', hot: false},
+            {id: 20, operator: 'banglalink', title: '১২০০ মিনিট + ১০ জিবি', price: '479', validity: '৩০ দিন', hot: false},
+            {id: 21, operator: 'banglalink', title: '১০০ জিবি ইন্টারনেট', price: '849', validity: '৩০ দিন', hot: true},
+            {id: 22, operator: 'banglalink', title: '২০ জিবি + ৬০০ মিনিট', price: '559', validity: '৩০ দিন', hot: false},
+            {id: 23, operator: 'banglalink', title: 'আনলিমিটেড ইন্টারনেট', price: '349', validity: '৭ দিন', hot: true},
+            {id: 24, operator: 'airtel', title: '৭৫ জিবি ইন্টারনেট', price: '679', validity: '৩০ দিন', hot: false},
+            {id: 25, operator: 'airtel', title: '৩৫ জিবি + ৫০০ মিনিট', price: '529', validity: '৩০ দিন', hot: true},
+            {id: 26, operator: 'airtel', title: '৯০ জিবি ইন্টারনেট', price: '749', validity: '৩০ দিন', hot: true},
+            {id: 27, operator: 'airtel', title: '২৫ জিবি + ৮০০ মিনিট', price: '599', validity: '৩০ দিন', hot: false},
+            {id: 28, operator: 'airtel', title: '১২ জিবি + ৩০০ মিনিট', price: '379', validity: '১৫ দিন', hot: false},
+            {id: 29, operator: 'airtel', title: 'আনলিমিটেড মিনিট + ৫ জিবি', price: '399', validity: '৩০ দিন', hot: false},
+            {id: 30, operator: 'airtel', title: '৬০ জিবি ইন্টারনেট', price: '639', validity: '৩০ দিন', hot: false}
+        ];
+
+        let offers = JSON.parse(localStorage.getItem('mbOffers')) || defaultOffers;
+        let isAdmin = false;
+        const ADMIN_PASS = 'admin123';
+        const PAYMENT_NUMBER = '01823926284';
+
+        function renderOffers() {
+            const grid = document.getElementById('offerGrid');
+            grid.innerHTML = '';
+            
+            offers.forEach(offer => {
+                const opName = {
+                    'gp': 'গ্রামীণফোন',
+                    'robi': 'রবি',
+                    'banglalink': 'বাংলালিংক',
+                    'airtel': 'এয়ারটেল'
+                }[offer.operator];
+                
+                const card = `
+                    <div class="offer-card">
+                        ${isAdmin ? `<button class="delete-btn" onclick="deleteOffer(${offer.id})"><i class="fa-solid fa-trash"></i></button>` : ''}
+                        <span class="operator ${offer.operator}">
+                            ${opName} ${offer.hot ? '<span class="hot">HOT</span>' : ''}
+                        </span>
+                        <h3 class="offer-title">${offer.title}</h3>
+                        <p class="offer-validity">মেয়াদ: ${offer.validity}</p>
+                        <div class="offer-price">৳${offer.price}</div>
+                        <div class="payment-info">
+                            <h4>💰 ১ ট্যাপে পেমেন্ট:</h4>
+                            <div class="payment-btns">
+                                <a href="bkash://sendmoney?phone=${PAYMENT_NUMBER}&amount=${offer.price}" class="bkash-link">
+                                    <i class="fa-solid fa-wallet"></i> বিকাশ পেমেন্ট
+                                </a>
+                                <a href="nagad://sendmoney?phone=${PAYMENT_NUMBER}&amount=${offer.price}" class="nagad-link">
+                                    <i class="fa-solid fa-mobile"></i> নগদ পেমেন্ট
+                                </a>
+                            </div>
+                            <div class="tap-hint">ট্যাপ করলে Send Money খুলবে</div>
+                            <div class="payment-steps">১. ট্যাপ করুন → ২. PIN দিয়ে Send করুন → ৩. WhatsApp করুন</div>
+                        </div>
+                        <a href="https://wa.me/8801823926284?text=${opName} ${offer.title} ${offer.price}tk অফারটি নিতে চাই। আমার নাম্বার: " target="_blank" class="btn-order">অর্ডার করুন</a>
+                    </div>
+                `;
+                grid.innerHTML += card;
+            });
+            
+            document.querySelectorAll('.bkash-link, .nagad-link').forEach(link => {
+                link.addEventListener('click', function() {
+                    navigator.clipboard.writeText(PAYMENT_NUMBER);
+                    showToast('নাম্বার কপি হয়েছে: ' + PAYMENT_NUMBER);
+                });
+            });
+            
+            document.body.classList.toggle('admin-mode', isAdmin);
+        }
+
+        function showLogin() {
+            document.getElementById('loginModal').classList.add('active');
+        }
+        
+        function loginAdmin() {
+            const pass = document.getElementById('adminPass').value;
+            if(pass === ADMIN_PASS) {
+                isAdmin = true;
+                document.getElementById('adminBar').classList.add('active');
+                closeModal('loginModal');
+                renderOffers();
+                showToast('এডমিন মোড চালু হয়েছে ✅');
+            } else {
+                showToast('ভুল পাসওয়ার্ড ❌');
+            }
+            document.getElementById('adminPass').value = '';
+        }
+        
+        function logoutAdmin() {
+            isAdmin = false;
+            document.getElementById('adminBar').classList.remove('active');
+            renderOffers();
+            showToast('লগআউট হয়েছে');
+        }
+
+        function openAddModal() {
+            document.getElementById('addModal').classList.add('active');
+        }
+        
+        function addOffer() {
+            const newOffer = {
+                id: Date.now(),
+                operator: document.getElementById('offerOperator').value,
+                title: document.getElementById('offerTitle').value,
+                price: document.getElementById('offerPrice').value,
+                validity: document.getElementById('offerValidity').value,
+                hot: document.getElementById('offerHot').checked
+            };
+            
+            if(!newOffer.title || !newOffer.price || !newOffer.validity) {
+                showToast('সব ফিল্ড পূরণ করুন ❌');
+                return;
+            }
+            
+            offers.unshift(newOffer);
+            localStorage.setItem('mbOffers', JSON.stringify(offers));
+            renderOffers();
+            closeModal('addModal');
+            showToast('অফার যোগ হয়েছে ✅');
+            
+            document.getElementById('offerTitle').value = '';
+            document.getElementById('offerPrice').value = '';
+            document.getElementById('offerValidity').value = '';
+            document.getElementById('offerHot').checked = false;
+        }
+        
+        function deleteOffer(id) {
+            if(confirm('এই অফার ডিলিট করবেন?')) {
+                offers = offers.filter(o => o.id !== id);
+                localStorage.setItem('mbOffers', JSON.stringify(offers));
+                renderOffers();
+                showToast('অফার ডিলিট হয়েছে ✅');
+            }
+        }
+
+        function closeModal(id) {
+            document.getElementById(id).classList.remove('active');
+        }
+        
+        function showToast(msg) {
+            const toast = document.getElementById('toast');
+            toast.textContent = msg;
+            toast.classList.add('show');
+            setTimeout(() => toast.classList.remove('show'), 2000);
+        }
+
+        renderOffers();
+    </script>
 </body>
 </html>
